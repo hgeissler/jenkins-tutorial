@@ -1,0 +1,8 @@
+# cp table.j2 to /var/www/html/index.php from jenkins docker to web docker
+# via > ansible-playbook -i hosts people.yml -e "PEOPLE_AGE=25"
+- hosts: web1
+  tasks:
+    - name: Transfer template to web server
+      template: 
+        src: table.j2
+        dest: /var/www/html/index.php

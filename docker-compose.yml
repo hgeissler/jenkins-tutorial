@@ -1,0 +1,47 @@
+version: '3'
+# docker containers
+services:
+  jenkins:
+    container_name: jenkins
+    image: jenkins-ansible
+    build:
+      # subfolder to look for eg. Dockerfile,...
+      context: jenkins-ansible
+    ports:
+      # map "host:container"
+      - "8080:8080"
+    volumes:
+      # files modified in one folder will modify same file in other folder
+      - "$PWD/jenkins_home:/var/jenkins_home"
+    networks:
+      - net
+  remote_host:
+    container_name: remote-host
+    image: remote-host
+    build:
+      context: centos7
+    networks:
+      - net
+    volumes:
+      - "$PWD/sql-backup.sh:/tmp/script.sh"
+  db_host:
+    container_name: db
+    image: mysql:5.7
+    environment:
+      - "MYSQL_ROOT_PASSWORD=1234"
+    volumes:
+      - "$PWD/db_data:/var/lib/mysql"
+    networks:
+      - net
+  web:
+    container_name: web
+    image: ansible-web
+    build:
+      context: jenkins-ansible/web
+    ports:
+      - "80:80"
+    networks:
+      - net
+networks:
+  net:
+
