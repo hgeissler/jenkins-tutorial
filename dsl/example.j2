@@ -1,0 +1,39 @@
+## creates another job with the executing job as the seed job
+## creates parameters for the new job
+## connects to git
+## 'Build now' triggers At 05:00 on every Sunday
+## adds build steps (""" for multiline)
+## adds a mailer
+ 
+job('job_dsl_example') {
+
+    description('This is my awesome Job')
+
+  
+    parameters {
+        stringParam('Planet', defaultValue = 'world', description = 'This is the world')
+	booleanParam('FLAG', true)
+        choiceParam('OPTION', ['option 1 (default)', 'option 2', 'option 3'])
+    }
+
+    scm {
+        github('ricardoandre97/jenkins-resources', 'master')
+    }
+    
+    triggers {
+        cron('H * * 7')
+    }
+    
+    steps {
+        shell("""
+                 echo 'Hello World'
+                 echo 'From Seed Job'
+              """
+        )
+        shell("echo 'Hello from step 2'")
+    }
+
+    publishers {
+        mailer('me@example.com', true, true)
+    }
+}
