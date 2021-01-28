@@ -1,0 +1,37 @@
+#!/usr/bin/env groovy
+// this file is supposed to be in the /workspace/<job>/
+// it needs to be executable
+// Global Security > Enable script security for DSL job >>> Uncheck
+ 
+job('job_dsl_example') {
+
+    description('This is my awesome Job')
+
+  
+    parameters {
+        stringParam('Planet', defaultValue = 'world', description = 'This is the world')
+	booleanParam('FLAG', true)
+        choiceParam('OPTION', ['option 1 (default)', 'option 2', 'option 3'])
+    }
+
+    scm {
+        github('ricardoandre97/jenkins-resources', 'master')
+    }
+    
+    triggers {
+        cron('H * * 7')
+    }
+    
+    steps {
+        shell("""
+                 echo 'Hello World'
+                 echo 'From Seed Job'
+              """
+        )
+        shell("echo 'Hello from step 2'")
+    }
+
+    publishers {
+        mailer('me@example.com', true, true)
+    }
+}
