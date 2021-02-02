@@ -1,0 +1,5 @@
+<Mtbx>
+ <Test name="Test.tsp" path="C:\Development\UFT-AmazonWebShopTest\TestCase1">
+ <Parameter name="ParamSearch" value="${SHOPPING_LIST}" type="string"/>
+ </Test>
+</Mtbx>
