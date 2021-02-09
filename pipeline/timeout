@@ -1,0 +1,19 @@
+pipeline {
+  agent any
+
+  stages {
+    stage('Timeout') {
+      steps {
+        // this works on first try
+        retry(3) {
+          sh 'echo hello'
+        }
+        // pipeline fails because the timeout of 3 seconds is exceeded
+        timeout(time: 3, unit: 'SECONDS') {
+          sh 'sleep 5'
+        }
+      }
+    }
+  }
+}
+
